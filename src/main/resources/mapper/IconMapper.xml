@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.IconMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Icon" >
+    <id column="i_id" property="iId" jdbcType="INTEGER" />
+    <result column="is_del" property="isDel" jdbcType="INTEGER" />
+    <result column="i_url" property="iUrl" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  update t_icon
+  set is_del=1
+  where i_id=#{id}
+  </update>
+  <insert id="insert" parameterType="com.example.demo.entity.Icon" >
+    insert into t_icon (i_id, is_del, i_url
+      )
+    values (#{iId,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, #{iUrl,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Icon" >
+    update t_icon
+    set
+      i_url = #{iUrl,jdbcType=LONGVARCHAR}
+    where i_id = #{iId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select i_id, is_del, i_url
+    from t_icon
+    where i_id = #{iId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select i_id, is_del, i_url
+    from t_icon
+    where is_del=0
+  </select>
+</mapper>

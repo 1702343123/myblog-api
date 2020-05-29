@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.TimelineMapper">
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.Timeline">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="time" property="time" jdbcType="DATE"/>
+        <result column="is_del" property="isDel" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+   update t_timeline
+   set is_del=1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <insert id="insert" parameterType="com.example.demo.entity.Timeline">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_timeline (`time`, is_del, content
+        )
+        values (#{time,jdbcType=DATE}, #{isDel,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Timeline">
+    update t_timeline
+    set `time` = #{time,jdbcType=DATE},
+      is_del = #{isDel,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select id, `time`, is_del, content
+    from t_timeline
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, `time`, is_del, content
+    from t_timeline
+    where is_del=0
+    order by `time` desc
+  </select>
+</mapper>

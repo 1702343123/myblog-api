@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.User">
+        <id column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="user_pass" property="userPass" jdbcType="VARCHAR"/>
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="INTEGER"/>
+        <result column="is_forbid" property="isForbid" jdbcType="INTEGER"/>
+        <result column="user_icon" property="userIcon" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.example.demo.entity.User">
+    insert into t_user (user_id, user_name, user_pass, 
+      phone_number, register_time, is_del, 
+      is_forbid, user_icon)
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userPass,jdbcType=VARCHAR}, 
+      #{phoneNumber,jdbcType=VARCHAR}, #{registerTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=INTEGER}, 
+      #{isForbid,jdbcType=INTEGER}, #{userIcon,jdbcType=LONGVARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.User">
+    update t_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_pass = #{userPass,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      register_time = #{registerTime,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=INTEGER},
+      is_forbid = #{isForbid,jdbcType=INTEGER},
+      user_icon = #{userIcon,jdbcType=LONGVARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select user_id, user_name, user_pass, phone_number, register_time, is_del, is_forbid, 
+    user_icon
+    from t_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="selectByPhone" resultMap="BaseResultMap" parameterType="String">
+    select user_id, user_name, user_pass, phone_number, register_time, is_del, is_forbid,
+    user_icon
+    from t_user
+    where phone_number = #{phoneNumber}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select user_id, user_name, user_pass, phone_number, register_time, is_del, is_forbid, 
+    user_icon
+    from t_user
+    order by register_time desc
+  </select>
+
+    <update id="removeUser" parameterType="Integer">
+    update t_user
+    <trim prefix="set">
+        <if test="isDel lt 1">is_del=1</if>
+        <if test="isDel gt 0">is_del=0</if>
+    </trim>
+    where  user_id=#{userId}
+  </update>
+
+    <update id="forbidUser" parameterType="java.util.ArrayList">
+    update t_user
+     set is_forbid =1
+      where user_id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+  </update>
+
+    <update id="delArray" parameterType="java.util.ArrayList">
+        update ${table}
+        set is_del=1
+        where ${id} in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="searchUsers" resultMap="BaseResultMap" parameterType="map">
+        select u.* from t_user u
+        where is_del=0
+        <if test="keyword!=null">
+            and concat(u.user_name,u.user_pass,u.phone_number) like '%${keyword}%'
+        </if>
+        order by u.register_time desc
+    </select>
+
+    <update id="forbid" parameterType="Integer">
+        update t_user
+        <trim prefix="set">
+            <if test="is_forbid lt 1">is_forbid=1</if>
+            <if test="is_forbid gt 0">is_forbid=0</if>
+        </trim>
+        where user_id=#{id}
+    </update>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.AdminMapper">
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.Admin">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="pass" property="pass" jdbcType="VARCHAR"/>
+        <result column="icon" property="icon" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_admin
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.example.demo.entity.Admin">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_admin (`name`, pass, icon
+        )
+        values (#{name,jdbcType=VARCHAR}, #{pass,jdbcType=VARCHAR}, #{icon,jdbcType=LONGVARCHAR}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Admin">
+    update t_admin
+    set `name` = #{name,jdbcType=VARCHAR},
+      pass = #{pass,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select id, `name`, pass, icon
+    from t_admin
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, `name`, pass, icon
+    from t_admin
+  </select>
+    <select id="selByNamePass" resultMap="BaseResultMap" parameterType="String">
+    select id, `name`, pass, icon
+    from t_admin
+    where name=#{name}
+    and pass=#{pass}
+  </select>
+</mapper>

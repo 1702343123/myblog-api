@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.CarouselMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Carousel" >
+    <id column="c_id" property="cId" jdbcType="INTEGER" />
+    <result column="is_del" property="isDel" jdbcType="INTEGER" />
+    <result column="c_pc" property="cPc" jdbcType="LONGVARCHAR" />
+    <result column="c_mobile" property="cMobile" jdbcType="LONGVARCHAR" />
+    <result column="c_night" jdbcType="LONGVARCHAR" property="cNight" />
+  </resultMap>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    update t_carousel
+    set is_del=1
+    where c_id=#{id}
+  </update>
+  <insert id="insert" parameterType="com.example.demo.entity.Carousel" >
+    insert into t_carousel (c_id, is_del, c_pc, c_night,
+      c_mobile)
+    values (#{cId,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, #{cPc,jdbcType=LONGVARCHAR},
+    #{cNight},#{cMobile,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Carousel" >
+    update t_carousel
+    <trim prefix="set" suffixOverrides=",">
+      <if test=" cPc!=null and cPc!=''">
+        c_pc = #{cPc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test=" cNight!=null and cNight!=''">
+        c_night = #{cNight,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="cMobile !=null  and cMobile !=''">
+        c_mobile = #{cMobile,jdbcType=LONGVARCHAR}
+      </if>
+    </trim>
+    where c_id = #{cId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select c_id, is_del, c_pc, c_mobile
+    from t_carousel
+    where c_id = #{cId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select c_id, is_del, c_pc, c_mobile,c_night
+    from t_carousel where is_del=0
+  </select>
+</mapper>

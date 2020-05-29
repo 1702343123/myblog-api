@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.MsgReplyMapper">
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.MsgReply">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="pid" property="pid" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="reply_user_id" property="replyUserId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_msg_reply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.example.demo.entity.MsgReply" useGeneratedKeys="true"
+            keyProperty="id">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_msg_reply (pid, user_id, reply_user_id,
+        create_time, is_del, content
+        )
+        values (#{pid,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+        #{replyUserId,jdbcType=INTEGER},
+        #{createTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.MsgReply">
+    update t_msg_reply
+    set pid = #{pid,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      reply_user_id = #{replyUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select id, pid, user_id, reply_user_id, create_time, is_del, content
+    from t_msg_reply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="Integer">
+    select id, pid, user_id, reply_user_id, create_time, is_del, content
+    from t_msg_reply where is_del=0 and pid=#{mId}
+  </select>
+    <update id="delMsgReply" parameterType="Integer">
+    update t_msg_reply
+    set
+      is_del = 1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

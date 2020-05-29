@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.ArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Article" >
+    <id column="a_id" property="aId" jdbcType="INTEGER" />
+    <result column="a_title" property="aTitle" jdbcType="VARCHAR" />
+    <result column="u_id" property="uId" jdbcType="INTEGER" />
+    <result column="a_time" property="aTime" />
+    <result column="a_img" property="aImg" jdbcType="VARCHAR" />
+    <result column="a_scan" property="aScan" jdbcType="INTEGER" />
+    <result column="is_del" property="isDel" jdbcType="INTEGER" />
+    <result column="is_top" property="isTop" jdbcType="INTEGER" />
+    <result column="a_content" property="aContent" jdbcType="LONGVARCHAR" />
+    <result column="hover_img" property="hoverImg" jdbcType="LONGVARCHAR" />
+    <result column="a_img2" property="aImg2" jdbcType="LONGVARCHAR" />
+    <result column="hover_img2" property="hoverImg2" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_article
+    where a_id = #{aId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.Article" >
+      insert into t_article (a_id, a_title, u_id,
+      a_time, a_img, a_scan,
+      is_del, is_top, a_content,
+      hover_img, a_img2, hover_img2
+      )
+    values (#{aId,jdbcType=INTEGER}, #{aTitle,jdbcType=VARCHAR}, #{uId,jdbcType=INTEGER},
+      #{aTime,jdbcType=TIMESTAMP}, #{aImg,jdbcType=VARCHAR}, #{aScan,jdbcType=INTEGER},
+      #{isDel,jdbcType=INTEGER}, #{isTop,jdbcType=INTEGER}, #{aContent,jdbcType=LONGVARCHAR},
+      #{hoverImg,jdbcType=LONGVARCHAR}, #{aImg2,jdbcType=LONGVARCHAR}, #{hoverImg2,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Article" >
+    update t_article
+    <trim prefix="set" suffixOverrides=",">
+      <if test="aTitle !=null and aTitle !=''">
+        a_title = #{aTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="aTime !=null">
+        a_time = #{aTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aScan !=null and  aScan!=''">
+        a_scan = #{aScan,jdbcType=INTEGER},
+      </if>
+      <if test="aContent !=null and aContent !=''">
+        a_content = #{aContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="hoverImg !=null and hoverImg !=''">
+        hover_img = #{hoverImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="aImg2 !=null and aImg2 !=''">
+        a_img2 = #{aImg2,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="hoverImg2!=null and hoverImg2!=''">
+        hover_img2 = #{hoverImg2,jdbcType=LONGVARCHAR},
+      </if>
+
+      <if test="aImg!=null and aImg!=''">
+        a_img = #{aImg,jdbcType=VARCHAR}
+      </if>
+    </trim>
+    where a_id = #{aId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from t_article
+    where a_id = #{aId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+   select a_id, a_title, u_id, a_time, a_img, a_scan, is_del, is_top, a_content, hover_img,
+    a_img2, hover_img2
+    from t_article
+     where is_del=0 order by a_time DESC
+  </select>
+</mapper>

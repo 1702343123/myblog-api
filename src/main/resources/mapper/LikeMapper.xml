@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.LikeMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Like" >
+    <id column="l_id" property="lId" jdbcType="INTEGER" />
+    <result column="a_id" property="aId" jdbcType="INTEGER" />
+    <result column="u_id" property="uId" jdbcType="INTEGER" />
+    <result column="is_like" property="isLike" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_like
+    where l_id = #{lId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.Like" >
+    insert into t_like (l_id, a_id, u_id, 
+      is_like)
+    values (#{lId,jdbcType=INTEGER}, #{aId,jdbcType=INTEGER}, #{uId,jdbcType=INTEGER}, 
+      #{isLike,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Like" >
+    update t_like
+    set a_id = #{aId,jdbcType=INTEGER},
+      u_id = #{uId,jdbcType=INTEGER},
+      is_like = #{isLike,jdbcType=INTEGER}
+    where l_id = #{lId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select l_id, a_id, u_id, is_like
+    from t_like
+    where l_id = #{lId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="Integer" >
+    select l_id, a_id, u_id, is_like
+    from t_like where a_id=#{id} and is_like=0
+  </select>
+
+  <update id="updateStatus" parameterType="Integer">
+    update t_like
+    <trim prefix="set" >
+      <if test="status lt 1">is_like=1</if>
+      <if test="status gt 0">is_like=0</if>
+    </trim>
+    where l_id=#{id}
+  </update>
+
+
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.WebMapper">
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.Web">
+        <id column="w_id" property="wId" jdbcType="INTEGER"/>
+        <result column="icp" property="icp" jdbcType="VARCHAR"/>
+        <result column="bg_img" property="bgImg" jdbcType="LONGVARCHAR"/>
+        <result column="bg_img2" property="bgImg2" jdbcType="LONGVARCHAR"/>
+        <result column="logo" property="logo" jdbcType="LONGVARCHAR"/>
+        <result column="logo2" property="logo2" jdbcType="LONGVARCHAR"/>
+        <result column="pay_zfb" property="payZfb" jdbcType="LONGVARCHAR"/>
+        <result column="pay_wechat" property="payWechat" jdbcType="LONGVARCHAR"/>
+        <result column="gzh" property="gzh" jdbcType="LONGVARCHAR"/>
+        <result column="w_bar" property="wBar" jdbcType="LONGVARCHAR"/>
+        <result column="w_bar2" property="wBar2" jdbcType="LONGVARCHAR"/>
+        <result column="img" property="img" jdbcType="LONGVARCHAR" />
+        <result column="night_img" property="nightImg" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_web
+    where w_id = #{wId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.example.demo.entity.Web">
+    insert into t_web (w_id, icp, bg_img, 
+      logo, pay_zfb, pay_wechat, 
+      gzh, w_bar)
+    values (#{wId,jdbcType=INTEGER}, #{icp,jdbcType=VARCHAR}, #{bgImg,jdbcType=LONGVARCHAR}, 
+      #{logo,jdbcType=LONGVARCHAR}, #{payZfb,jdbcType=LONGVARCHAR}, #{payWechat,jdbcType=LONGVARCHAR}, 
+      #{gzh,jdbcType=LONGVARCHAR}, #{wBar,jdbcType=LONGVARCHAR})
+  </insert>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select w_id, icp, bg_img,bg_img2, logo,logo2, pay_zfb,
+    pay_wechat, gzh, w_bar,w_bar2,img, night_img
+    from t_web
+    where w_id = #{wId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select w_id, icp, bg_img, bg_img2, img, night_img, logo, logo2, pay_zfb, pay_wechat,
+    gzh, w_bar, w_bar2
+    from t_web
+  </select>
+</mapper>
